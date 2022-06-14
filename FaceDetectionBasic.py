@@ -28,6 +28,8 @@ while True:
                    int(bboxC.width * iw), int(bboxC.height * ih)
 
             cv.rectangle(img, bbox, (0, 255, 0), 2)
+            cv.putText(img, f'{int(detection.score[0])}', (bbox[0], bbox[1]-20),
+                       cv.FONT_HERSHEY_PLAIN, 3, (0, 255, 0), 2)
 
     cTime = time.time()
     fps = 1 / (cTime-pTime)
@@ -35,6 +37,7 @@ while True:
     cv.putText(img, f'FPS:{int(fps)}', (20,70), cv.FONT_HERSHEY_PLAIN, 3, (255,0,255), 2)
     faceDetection.process(img)
 
-
     cv.imshow("face", img)
     cv.waitKey(1)
+
+    
