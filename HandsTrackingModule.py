@@ -2,13 +2,14 @@ import cv2 as cv
 import mediapipe as mp
 import time
 
+
 class handDetector():
     def __init__(self,
-                 mode,
-                 maxNum,
-                 complexity,
-                 minDectionConfidence,
-                 minTrackingConfidence):
+                 mode=False,
+                 maxNum=2,
+                 complexity=1,
+                 minDectionConfidence=0.5,
+                 minTrackingConfidence=0.5):
         self.mode = mode
         self.maxNum = maxNum
         self.complexity = complexity
@@ -26,8 +27,8 @@ class handDetector():
     def findHands(self,
                   img,
                   draw=True):
-        imgBGR = cv.cvtColor(img, cv.COLOR_GRAY2BGR)
-        self.results = self.hands.process(imgBGR)
+        imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)
+        self.results = self.hands.process(imgRGB)
 
         if self.results.multi_hand_landmarks:
             for handLms in self.results.multi_hand_landmarks:
@@ -35,23 +36,22 @@ class handDetector():
                     self.mpDraw.draw_landmarks(img, handLms, self.mphands.HAND_CONNECTIONS)
         return img
 
+    def findPosition(self, img, handNo=0, draw=True):
 
-        def findPosition(img, handNo=0, draw=True):
+        lmList = []
+        if self.results.multi_hand_landmarks:
+            myHand = self.results.multi_hand_landmarks[handNo]
+            for id, lm in enumerate(myHand.landmark):
+                h, w, c = img.shape
+                cx, cy = int(lm.x * w), int(lm.y * h)
+                lmList.append([id, cx, cy])
+                if draw:
+                    cv.circle(img, (cx, cy), 15, (255, 0, 255), cv.FILLED)
 
-            lmList = []
-            if self.results.multi_hand_landmarks:
-                myHand = self.results.multi_hand_landmarks[handNo]
-                for id, lm in enumerate(myHand.landmark):
-                    h, w, c = img.shape
-                    cx, cy = int(lm.x*w), int(lm.y*h)
-                    lmList.append([id, cx, cy])
-                    if draw:
-                        cv.circle(img, (cx, cy), 15, (255, 0, 255), cv.FILLED)
+        return lmList
 
-            return lmList
 
 def main():
-
     pTime = 0
     cTime = 0
     cap = cv.VideoCapture(0)
@@ -68,11 +68,6 @@ def main():
         cv.putText(img, str(int(fps)), (10, 78), cv.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
         cv.imshow(img)
         cv.waitKey(1)
-
-
-
-
-
 
 
 if __name__ == "__main__":

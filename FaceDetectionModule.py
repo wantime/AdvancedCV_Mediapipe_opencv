@@ -52,20 +52,20 @@ class faceDetector():
     def fancyDraw(self, img, bbox, l=30, t=5):
         x, y, w, h = bbox
         x1, y1 = x + w, y + h
-
-        cv.rectangle(img, bbox, (255, 0, 255), 2)
+        color = (255, 0, 255)
+        cv.rectangle(img, bbox, color, 2)
         # Top Left x,y
-        cv.line(img, (x,y), (x+l, y), (255, 0, 255), t)
-        cv.line(img, (x,y), (x, y+l), (255, 0, 255), t)
+        cv.line(img, (x,y), (x+l, y), color, t)
+        cv.line(img, (x,y), (x, y+l), color, t)
         # Top Right x1,y
-        cv.line(img, (x1, y), (x1 - l, y), (255, 0, 255), t)
-        cv.line(img, (x1, y), (x1, y + l), (255, 0, 255), t)
+        cv.line(img, (x1, y), (x1 - l, y), color, t)
+        cv.line(img, (x1, y), (x1, y + l), color, t)
         # Bottom Right x1,y1
-        cv.line(img, (x1, y1), (x1 - l, y1), (255, 0, 255), t)
-        cv.line(img, (x1, y1), (x1, y1 - l), (255, 0, 255), t)
+        cv.line(img, (x1, y1), (x1 - l, y1), color, t)
+        cv.line(img, (x1, y1), (x1, y1 - l), color, t)
         # Bottom left x,y1
-        cv.line(img, (x, y1), (x + l, y1), (255, 0, 255), t)
-        cv.line(img, (x, y1), (x, y1 - l), (255, 0, 255), t)
+        cv.line(img, (x, y1), (x + l, y1), color, t)
+        cv.line(img, (x, y1), (x, y1 - l), color, t)
         return img
 
 def main():
