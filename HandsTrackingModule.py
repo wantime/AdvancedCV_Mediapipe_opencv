@@ -23,7 +23,7 @@ class handDetector():
                                         self.minDectionConfidence,
                                         self.minTrackingConfidence)
         self.mpDraw = mp.solutions.drawing_utils
-
+        self.mpDraw.DrawingSpec([0, 255, 0], thickness=1, circle_radius=2)
     def findHands(self,
                   img,
                   draw=True):
@@ -46,7 +46,7 @@ class handDetector():
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 lmList.append([id, cx, cy])
                 if draw:
-                    cv.circle(img, (cx, cy), 15, (255, 0, 255), cv.FILLED)
+                    cv.circle(img, (cx, cy), 5, (0, 255, 0), cv.FILLED)
 
         return lmList
 

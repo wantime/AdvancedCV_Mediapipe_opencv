@@ -30,7 +30,7 @@ while True:
     lmList = handDetector.findPosition(img)
     results = []
     if len(lmList) > 0:
-        if lmList[handsPointIndex[0]][1] > lmList[handsPointIndex[0]-2][1]:
+        if lmList[handsPointIndex[0]][1] < lmList[handsPointIndex[0]-2][1]:
             results.append(1)
         else:
             results.append(0)
@@ -48,15 +48,19 @@ while True:
         iw, ih, ic = img_finger.shape
         img[:iw, :ih, :] = img_finger
 
+        cv.rectangle(img, (20, 225), (170, 425), (0, 255, 0), cv.FILLED)
+        cv.putText(img, str(number), (45, 375), cv.FONT_HERSHEY_PLAIN,
+                   10, (255, 0, 0), 25)
+
 
     cTime = time.time()
     fps = 1 / (cTime-pTime)
     pTime = cTime
 
-    cv.imshow('image', img)
-    cv.putText(img, f'FPS:{int(fps)}', (540, 50), cv.FONT_HERSHEY_PLAIN,
-               3, (0, 255, 0), 2)
 
+    cv.putText(img, f'FPS:{int(fps)}', (440, 50), cv.FONT_HERSHEY_PLAIN,
+               3, (0, 255, 0), 2)
+    cv.imshow('image', img)
 
     cv.waitKey(1)
 
