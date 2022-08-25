@@ -50,7 +50,7 @@ class poseDetector():
                 lmList.append([id, cx, cy])
                 if draw:
                     cv.circle(img, (cx, cy), 5, (255, 0, 0), cv.FILLED)
-        return lmList
+        return lmList, img
 
 def main():
     cap = cv.VideoCapture()
