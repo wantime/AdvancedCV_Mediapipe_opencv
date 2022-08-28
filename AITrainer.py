@@ -16,14 +16,17 @@ poseDetector = pm.poseDetector()
 
 while True:
     success, img = cap.read()
+    img = cv.imread('data/pose/2.jpg')
     # try to detect
-    img = poseDetector.findPose(img)
+    img = poseDetector.find_pose(img, draw=False)
     # get the land mark (the coordinates of pose)
-    lmList, img = poseDetector.findPosition(img)
+    lmList, img = poseDetector.find_position(img, draw=False)
     # do something through the relative position of points.
     if len(lmList) > 0:
-        pass
-
+        #right arm
+        poseDetector.find_angle(img, 12, 14, 16)
+        #left arm
+        poseDetector.find_angle(img, 11, 13, 15)
 
 
     cTime = time.time()
