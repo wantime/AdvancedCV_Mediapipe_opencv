@@ -24,8 +24,8 @@ handsPointIndex = [4, 8, 12, 16, 20]
 
 # continuous acquire image
 while True:
-    success, img = cap.read()
-
+    # success, img = cap.read()
+    img = cv.imread('data/hand.jpg')
     img = handDetector.findHands(img)
     lmList = handDetector.findPosition(img)
     results = []

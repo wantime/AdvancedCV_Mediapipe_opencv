@@ -55,7 +55,7 @@ class poseDetector:
 
         while angle < 0:
             angle = angle + 180
-        print(angle)
+        #print(angle)
         if draw:
             cv.line(img, (x1,y1), (x2, y2), (255, 255, 255), 3)
             cv.line(img, (x3, y3), (x2, y2), (255, 255, 255), 3)
@@ -66,7 +66,7 @@ class poseDetector:
             cv.circle(img, (x3, y3), 10, (0, 0, 255), cv.FILLED)
             cv.circle(img, (x3, y3), 15, (0, 0, 255), 2)
             cv.putText(img, str(int(angle)), (x2-20, y2+50),
-                       cv.FONT_HERSHEY_PLAIN, 2, (255, 255, 0), 2)
+                       cv.FONT_HERSHEY_PLAIN, 2, (255, 155, 0), 2)
         return angle
 
 
