@@ -14,16 +14,19 @@ pTime = 0
 
 handDetector = htm.handDetector()
 
-ColorsBar = [(100, 0, 0), (100, 200, 0), (0, 100, 0), (0, 200, 100), (0, 0, 100)]
+ColorsBar = [(150, 0, 0), (150, 200, 0), (0, 150, 0), (0, 200, 150), (0, 0, 150)]
 ColorSwitch = 0
 paintColor = ColorsBar[ColorSwitch]
 px, py = 0, 0
 
-canvas = np.zeros(shape=(wCam, hCam, 3), dtype=np.uint8)
+canvas = np.zeros(shape=(hCam, wCam, 3), dtype=np.uint8)
 while True:
     success, img = cap.read()
-    img = cv.flip(img, 1)
-    img, lmList = handDetector.findPosition(img)
+    img = cv.imread('data/pose/2.jpg')
+    # img = cv.resize(img, (wCam, hCam))
+    #img = cv.flip(img, 1)
+    img = handDetector.findHands(img)
+    lmList = handDetector.findPosition(img)
     fingerUp = handDetector.fingerUp()
     numOfFingerUp = fingerUp.sum()
 
@@ -49,11 +52,14 @@ while True:
         cv.rectangle(canvas, (ex1, ey1), (ex2, ey2), (0, 0, 0))
 
     # canvas
+    # print(paintColor)
+    # cv.line(canvas, (0, 0), (255, 255), (100,0,0), 10)
+    cv.imshow('canvas', canvas)
     canvasGray = cv.cvtColor(canvas, cv.COLOR_BGR2GRAY)
-    __, canInv = cv.threshold(canvasGray, 50, 255, cv.THRESH_BINARY_INV)
-    imgInv = cv.cvtColor(canInv, cv.COLOR_GRAY2BGR)
+    __, imgInv = cv.threshold(canvasGray, 50, 255, cv.THRESH_BINARY_INV)
+    imgInv = cv.cvtColor(imgInv, cv.COLOR_GRAY2BGR)
     img = cv.bitwise_and(img,imgInv)
-    img = cv.bitwise_or(img, canInv)
+    img = cv.bitwise_or(img, canvas)
 
 
     cTime = time.time()
