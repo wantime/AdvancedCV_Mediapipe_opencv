@@ -51,7 +51,7 @@ class handDetector:
         return self.lmList
 
     def fingerUp(self):
-        handsPointIndex = [8, 12, 16, 20]
+        handsPointIndex = [4, 8, 12, 16, 20]
         results = []
 
         if len(self.lmList) > 0:
@@ -60,7 +60,7 @@ class handDetector:
             else:
                 results.append(0)
             for id in range(1, 5):
-                if self.lmList[handsPointIndex[id]][2] < self.lmList[handsPointIndex[id] - 2][2]:
+                if self.lmList[handsPointIndex[id]][1] < self.lmList[handsPointIndex[id] - 2][1]:
                     results.append(1)
                 else:
                     results.append(0)

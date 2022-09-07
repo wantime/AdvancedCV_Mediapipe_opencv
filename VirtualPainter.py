@@ -12,9 +12,10 @@ cap.set(3, wCam)
 cap.set(4, hCam)
 pTime = 0
 
-handDetector = htm.handDetector()
+handDetector = htm.handDetector(maxNum=1)
 
-ColorsBar = [(150, 0, 0), (150, 200, 0), (0, 150, 0), (0, 200, 150), (0, 0, 150)]
+#ColorsBar = [(150, 0, 0), (150, 200, 0), (0, 150, 0), (0, 200, 150), (0, 0, 150)]
+ColorsBar = [(0, 0, 255)]
 ColorSwitch = 0
 paintColor = ColorsBar[ColorSwitch]
 px, py = 0, 0
@@ -22,39 +23,41 @@ px, py = 0, 0
 canvas = np.zeros(shape=(hCam, wCam, 3), dtype=np.uint8)
 while True:
     success, img = cap.read()
-    img = cv.imread('data/pose/2.jpg')
+    #img = cv.imread('data/pose/2.jpg')
     # img = cv.resize(img, (wCam, hCam))
-    #img = cv.flip(img, 1)
+    img = cv.flip(img, 1)
     img = handDetector.findHands(img)
     lmList = handDetector.findPosition(img)
     fingerUp = handDetector.fingerUp()
-    numOfFingerUp = fingerUp.sum()
+    numOfFingerUp = fingerUp.count(1)
 
-    if numOfFingerUp == 1 and fingerUp[0] == 1:
+    if numOfFingerUp == 1 and fingerUp[1] == 1:
         # painting
+
         x, y = lmList[8][1], lmList[8][2]
         if px == 0 and py == 0:
             px, py = x, y
-        cv.line(canvas, (px, py), (x, y), paintColor, 1)
+        cv.line(canvas, (px, py), (x, y), paintColor, 15)
+        px, py = x, y
     else:
         px, py = 0, 0
-    if numOfFingerUp == 0:
-        # change color
-        ColorSwitch = ColorSwitch + 1
-        if ColorSwitch == len(ColorsBar):
-            ColorSwitch = 0
-        paintColor = ColorsBar[ColorSwitch]
-    elif numOfFingerUp >= 4:
-        # eraser
-        pass
-        ex1, ey1 = lmList[8][1], lmList[8][2]
-        ex2, ey2 = lmList[17][1], lmList[17][2]
-        cv.rectangle(canvas, (ex1, ey1), (ex2, ey2), (0, 0, 0))
+        if numOfFingerUp == 0:
+            # change color
+            ColorSwitch = ColorSwitch + 1
+            if ColorSwitch == len(ColorsBar):
+                ColorSwitch = 0
+            paintColor = ColorsBar[ColorSwitch]
+        elif numOfFingerUp >= 4:
+            # eraser
+            pass
+            ex1, ey1 = lmList[8][1], lmList[8][2]
+            ex2, ey2 = lmList[17][1], lmList[17][2]
+            cv.rectangle(canvas, (ex1, ey1), (ex2, ey2), (0, 0, 0), cv.FILLED)
 
     # canvas
     # print(paintColor)
     # cv.line(canvas, (0, 0), (255, 255), (100,0,0), 10)
-    cv.imshow('canvas', canvas)
+    # cv.imshow('canvas', canvas)
     canvasGray = cv.cvtColor(canvas, cv.COLOR_BGR2GRAY)
     __, imgInv = cv.threshold(canvasGray, 50, 255, cv.THRESH_BINARY_INV)
     imgInv = cv.cvtColor(imgInv, cv.COLOR_GRAY2BGR)
@@ -70,4 +73,4 @@ while True:
                3, (0, 255, 0), 2)
     cv.imshow('painting', img)
 
-    cv.waitKey(0)
+    cv.waitKey(1)
